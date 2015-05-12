@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+_usage() { 
+cat<<EOF
+
+    DepSet
+
+    Usage:
+      depset [commands]
+
+    Commands:
+
+      freeze - Save all dependencies to current version and 
+               alias all imports
+
+
+
+EOF
+
+}
+
+
+
+_usage
+
