@@ -1,5 +1,15 @@
 #!/bin/bash
 
+#
+# Example:
+# 
+#   "github.com/stretchr/testify"
+#
+# should become:
+#
+#   testify "github.com/stretchr/testify-9a3bde9" //depset
+#
+
 
 _usage() { 
 cat<<EOF
@@ -21,6 +31,8 @@ EOF
 }
 
 
+main() {
 
 _usage
 
+}
