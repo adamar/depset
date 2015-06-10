@@ -31,6 +31,19 @@ EOF
 }
 
 
+listdeps() {
+
+  deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | sed -e 's/\"//' -e 's/\"//'))
+
+  for dep in "${deps[@]}"
+  do
+    _freeze_dep ${dep}
+  done
+
+}
+
+
+
 main() {
 
 _usage
