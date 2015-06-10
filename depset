@@ -31,7 +31,24 @@ EOF
 }
 
 
-listdeps() {
+_init() {
+
+  if [ -z "$GOROOT" ]; then
+    echo "GOROOT not set"
+    exit 1
+  fi
+
+  if [ -z "$GOPATH" ]; then
+    echo "GOPATH not set"
+    exit 1
+  fi
+
+}
+
+
+
+
+_listdeps() {
 
   deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | sed -e 's/\"//' -e 's/\"//'))
 
@@ -43,9 +60,21 @@ listdeps() {
 }
 
 
+_freeze_dep() {
+
+  echo "Freezing ${1}"
+
+}
+
+
 
 main() {
 
+_init
 _usage
+_listdeps $1
 
 }
+
+main ${1}
+
