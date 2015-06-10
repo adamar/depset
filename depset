@@ -60,19 +60,27 @@ _listdeps() {
 }
 
 
+_show_git_root() {
+
+  cd $1
+  base=`git rev-parse --show-toplevel`
+  echo $base
+  
+}
+
+
 
 _freeze_dep() {
 
   echo "Searching for ${GOPATH}/src/${1}"
   if [ -d "${GOPATH}/src/${1}" ]; then
-    echo "directory exists" 
+    root=$(_show_git_root "${GOPATH}/src/${1}")
+    echo "Git root is $root"
   else
     echo "not found" 
   fi
 
 }
-
-
 
 
 
