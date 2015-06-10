@@ -60,11 +60,19 @@ _listdeps() {
 }
 
 
+
 _freeze_dep() {
 
-  echo "Freezing ${1}"
+  echo "Searching for ${GOPATH}/src/${1}"
+  if [ -d "${GOPATH}/src/${1}" ]; then
+    echo "directory exists" 
+  else
+    echo "not found" 
+  fi
 
 }
+
+
 
 
 
