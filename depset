@@ -69,13 +69,26 @@ _show_git_root() {
 }
 
 
+_get_short_hash() {
+
+  cd $1
+  hash=`git rev-parse --short HEAD`
+  echo $hash
+
+}
+
 
 _freeze_dep() {
 
-  echo "Searching for ${GOPATH}/src/${1}"
-  if [ -d "${GOPATH}/src/${1}" ]; then
-    root=$(_show_git_root "${GOPATH}/src/${1}")
+  import="${1}"
+  fullpath="${GOPATH}/src/${1}"
+
+  echo "Searching for ${fullpath}"
+  if [ -d "${fullpath}" ]; then
+    root=$(_show_git_root "${fullpath}")
     echo "Git root is $root"
+    shorthash=$(_get_short_hash "${fullpath}")   
+    echo $shorthash
   else
     echo "not found" 
   fi
