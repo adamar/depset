@@ -82,18 +82,19 @@ _get_short_hash() {
 
 _freeze_dep() {
 
-  import="${1}"
-  fullpath="${GOPATH}/src/${1}"
+  local import="${1}"
+  local fullpath="${GOPATH}/src/${1}"
 
   echo "Searching for ${fullpath}"
-  if [ -d "${fullpath}" ]; then
-    root=$(_show_git_root "${fullpath}")
-    echo "Git root is $root"
-    shorthash=$(_get_short_hash "${fullpath}")   
-    echo $shorthash
-  else
-    echo "not found" 
+  if [[ ! -d ${fullpath} ]]; then
+    echo "Lib Not found... Go Getting"
+    go get ${import}
   fi
+
+  root=$(_show_git_root "${fullpath}")
+  echo "Git root is $root"
+  shorthash=$(_get_short_hash "${fullpath}")   
+  echo $shorthash
 
 }
 
