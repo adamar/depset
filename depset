@@ -50,7 +50,9 @@ _init() {
 
 _listdeps() {
 
-  deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | sed -e 's/\"//' -e 's/\"//'))
+  local FILENAME="${1}"
+
+  deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${FILENAME} | sed -e 's/\"//' -e 's/\"//'))
 
   for dep in "${deps[@]}"
   do
@@ -97,10 +99,11 @@ _freeze_dep() {
 
 
 freeze() {
-
-_init
-_listdeps $1
-
+  _init
+  for i in `find . -type f -iname '*.go'`;
+  do
+    _listdeps $i
+  done
 }
 
 
