@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #
 # Example:
 # 
@@ -10,8 +9,10 @@
 #   testify "github.com/stretchr/testify-9a3bde9" //depset
 #
 
+set -e
 
-_usage() { 
+
+usage() { 
 cat<<EOF
 
     DepSet
@@ -23,7 +24,6 @@ cat<<EOF
 
       freeze - Save all dependencies to current version and 
                alias all imports
-
 
 
 EOF
@@ -96,14 +96,25 @@ _freeze_dep() {
 }
 
 
-
-main() {
+freeze() {
 
 _init
-_usage
 _listdeps $1
 
 }
 
-main ${1}
+
+case "$1" in
+  freeze)
+    echo "Freezing"
+    freeze
+    ;;
+  usage)
+    usage
+    ;;
+  *)
+    echo "Unknown option $1"
+    usage
+    ;;
+esac
 
