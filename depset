@@ -56,7 +56,8 @@ _listdeps() {
 
   for dep in "${deps[@]}"
   do
-    _freeze_dep ${dep}
+    new_import_path=`_freeze_dep ${dep}`
+    echo "change to $new_import_path"
   done
 
 }
@@ -85,16 +86,15 @@ _freeze_dep() {
   local import="${1}"
   local fullpath="${GOPATH}/src/${1}"
 
-  echo "Searching for ${fullpath}"
   if [[ ! -d ${fullpath} ]]; then
-    echo "Lib Not found... Go Getting"
     go get ${import}
   fi
 
   root=$(_show_git_root "${fullpath}")
-  echo "Git root is $root"
   shorthash=$(_get_short_hash "${fullpath}")   
-  echo $shorthash
+
+  cp -r "${GOPATH}/src/${import}" "${GOPATH}/src/${import}-${shorthash}"
+  echo "${import}-$shorthash"
 
 }
 
