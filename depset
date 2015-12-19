@@ -50,7 +50,8 @@ _init() {
 
 _listdeps() {
 
-  deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | sed -e 's/\"//' -e 's/\"//'))
+  local deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | sed -e 's/\"//' -e 's/\"//'))
+  local dep
 
   for dep in "${deps[@]}"
   do
@@ -62,33 +63,33 @@ _listdeps() {
 
 _show_git_root() {
 
-  cd $1
-  base=`git rev-parse --show-toplevel`
-  echo $base
+  cd ${1}
+  local base=`git rev-parse --show-toplevel`
+  echo ${base}
   
 }
 
 
 _get_short_hash() {
 
-  cd $1
-  hash=`git rev-parse --short HEAD`
-  echo $hash
+  cd ${1}
+  local hash=`git rev-parse --short HEAD`
+  echo ${hash}
 
 }
 
 
 _freeze_dep() {
 
-  import="${1}"
-  fullpath="${GOPATH}/src/${1}"
+  local import="${1}"
+  local fullpath="${GOPATH}/src/${1}"
 
   echo "Searching for ${fullpath}"
   if [ -d "${fullpath}" ]; then
-    root=$(_show_git_root "${fullpath}")
-    echo "Git root is $root"
-    shorthash=$(_get_short_hash "${fullpath}")   
-    echo $shorthash
+    local root=$(_show_git_root "${fullpath}")
+    echo "Git root is ${root}"
+    local shorthash=$(_get_short_hash "${fullpath}")   
+    echo ${shorthash}
   else
     echo "not found" 
   fi
