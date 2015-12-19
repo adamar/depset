@@ -97,13 +97,29 @@ _freeze_dep() {
 
 
 
-main() {
 
-_init
-_usage
-_listdeps $1
 
-}
+for arg in "$@" ; do
+  case "$arg" in
+    freeze)
+      echo "freeze"
+      shift
+      ;;
+    usage)
+      echo "usage"
+      shift
+      ;;
+    update)
+      echo "update"
+      shift
+      ;;
+  esac
+done
 
-main ${1}
+
+
+
+
+
+
 
