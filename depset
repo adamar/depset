@@ -83,19 +83,24 @@ _get_short_hash() {
 _freeze_single_dep() {
 
   local import="${1}"
-  local fullpath="${GOPATH}/src/${1}"
+  local fullpath="${GOPATH}/src/${import}"
 
   echo "# Searching for ${fullpath}"
   if [ -d "${fullpath}" ]; then
-    ## lib exists
+    ## lib exists on disk
     local root=$(_show_git_root "${fullpath}")
     #echo "# Git root is ${root}"
     local shorthash=$(_get_short_hash "${fullpath}")   
     #echo "# The git hash of this lib is ${shorthash}"
-    echo "cp ${root} to ${root}-${shorthash}"
+    if [ ! -d "${root}-${shorthash}" ]; then
+      ## Lib exists on disk, but hasnt been frozen yet
+      cp -a ${root} ${root}-${shorthash}
+    fi
   else
-    ## lib doesnt exist
-    echo "# not found" 
+    ## lib doesnt exist on disk
+    go get ${import}
+    local root=$(_show_git_root "${fullpath}")
+    cp -a ${root} ${root}-${shorthash}
   fi
 
 }
