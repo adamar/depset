@@ -50,7 +50,7 @@ _init() {
 
 freeze_all_deps() {
 
-  local deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | sed -e 's/\"//' -e 's/\"//'))
+  local deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | grep -v "depset" | sed -e 's/\"//' -e 's/\"//'))
   local dep
 
   for dep in "${deps[@]}"
