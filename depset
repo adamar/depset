@@ -93,12 +93,21 @@ _update_import_line() {
 }
 
 
+_get_lib_name() {
+
+  local URL=${1}
+
+  echo ${URL##*/}
+
+}
+
 
 _freeze_single_dep() {
 
   local import="${1}"
   local filename="${2}"
   local fullpath="${GOPATH}/src/${import}"
+  local lib_name=`_get_lib_name $import`
 
   echo "# Searching for ${fullpath}"
   if [ -d "${fullpath}" ]; then
@@ -109,15 +118,15 @@ _freeze_single_dep() {
     #echo "# The git hash of this lib is ${shorthash}"
     if [ ! -d "${root}-${shorthash}" ]; then
       ## Lib exists on disk, but hasnt been frozen yet
-      #cp -a ${root} ${root}-${shorthash}
-      _update_import_line ${filename} ${import} "name" ${shorthash}
+      cp -a ${root} ${root}-${shorthash}
+      _update_import_line ${filename} ${import} ${lib_name} ${shorthash}
     fi
   else
     ## lib doesnt exist on disk
     go get ${import}
     local root=$(_show_git_root "${fullpath}")
-    #cp -a ${root} ${root}-${shorthash}
-    _update_import_line ${filename} ${import} "name" ${shorthash}
+    cp -a ${root} ${root}-${shorthash}
+    _update_import_line ${filename} ${import} ${lib_name} ${shorthash}
   fi
 
 }
