@@ -50,13 +50,14 @@ _init() {
 
 freeze_all_deps() {
 
-  local deps=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${1} | grep -v "depset" | sed -e 's/\"//' -e 's/\"//'))
-  local dep
+  local FILENAME = ${1}
+  local DEPS=($(grep "github.com\|gopkg.in\|code.google.com\|bitbucket.org\|azul3d.org" ${FILENAME} | grep -v "depset" | sed -e 's/\"//' -e 's/\"//'))
+  local i
 
-  for dep in "${deps[@]}"
+  for i in "${DEPS[@]}"
   do
-    echo "# found ${dep} in your golang file"
-    _freeze_single_dep ${dep}
+    echo "# found ${i} in your golang file"
+    _freeze_single_dep ${i} ${FILENAME}
   done
 
 }
@@ -79,10 +80,23 @@ _get_short_hash() {
 
 }
 
+_update_import_line() {
+  
+  local FILE
+  local LIB
+  local LIB_NAME
+  local SHORT_HASH
+
+  sed -i.bak 's,'"\"${LIB}\""','"${LIB_NAME} \"${LIB}-${SHORT_HASH}\" //depset"',' "$FILE"
+
+}
+
+
 
 _freeze_single_dep() {
 
   local import="${1}"
+  local filename="${2}"
   local fullpath="${GOPATH}/src/${import}"
 
   echo "# Searching for ${fullpath}"
@@ -95,12 +109,14 @@ _freeze_single_dep() {
     if [ ! -d "${root}-${shorthash}" ]; then
       ## Lib exists on disk, but hasnt been frozen yet
       cp -a ${root} ${root}-${shorthash}
+      _update_import_line ${filename} ${import} "name" ${shorthash}
     fi
   else
     ## lib doesnt exist on disk
     go get ${import}
     local root=$(_show_git_root "${fullpath}")
     cp -a ${root} ${root}-${shorthash}
+    _update_import_line ${filename} ${import} "name" ${shorthash}
   fi
 
 }
