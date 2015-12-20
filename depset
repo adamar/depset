@@ -56,7 +56,6 @@ freeze_all_deps() {
 
   for i in "${DEPS[@]}"
   do
-    echo "# found ${i} in your golang file"
     _freeze_single_dep ${i} ${FILENAME}
   done
 
@@ -109,20 +108,16 @@ _freeze_single_dep() {
   local fullpath="${GOPATH}/src/${import}"
   local lib_name=`_get_lib_name $import`
 
-  echo "# Searching for ${fullpath}"
   if [ -d "${fullpath}" ]; then
-    ## lib exists on disk
     local root=$(_show_git_root "${fullpath}")
-    #echo "# Git root is ${root}"
     local shorthash=$(_get_short_hash "${fullpath}")   
-    #echo "# The git hash of this lib is ${shorthash}"
     if [ ! -d "${root}-${shorthash}" ]; then
-      ## Lib exists on disk, but hasnt been frozen yet
+      echo "# Getting and Freezing \"${import}\" -> ${shorthash}"
       cp -a ${root} ${root}-${shorthash}
       _update_import_line ${filename} ${import} ${lib_name} ${shorthash}
     fi
   else
-    ## lib doesnt exist on disk
+    echo "# Getting and Freezing \"${import}\" -> ${shorthash}"
     go get ${import}
     local root=$(_show_git_root "${fullpath}")
     cp -a ${root} ${root}-${shorthash}
@@ -135,8 +130,6 @@ for arg in "$@" ; do
   case "$arg" in
     freeze)
       freeze_all_deps ${2}
-      echo ${1}
-      echo ${2}
       shift
       ;;
     usage)
