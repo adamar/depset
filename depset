@@ -1,5 +1,4 @@
 #!/bin/bash
-
 #
 # Example:
 # 
@@ -10,8 +9,10 @@
 #   testify "github.com/stretchr/testify-9a3bde9" //depset
 #
 
+set -e
 
-_usage() { 
+
+usage() { 
 cat<<EOF
 
     DepSet
@@ -23,7 +24,6 @@ cat<<EOF
 
       freeze - Save all dependencies to current version and 
                alias all imports
-
 
 
 EOF
@@ -104,10 +104,6 @@ _freeze_single_dep() {
   fi
 
 }
-
-
-
-
 
 for arg in "$@" ; do
   case "$arg" in
